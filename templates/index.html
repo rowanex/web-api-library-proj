@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Библиотека</title>
+</head>
+<body>
+    <h1>Библиотека</h1>
+
+    <h2>Авторы</h2>
+    <ul id="authors-list">
+        {% for author in authors %}
+            <li>{{ author.name }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Книги</h2>
+    <ul id="books-list">
+        {% for book in books %}
+            <li>{{ book.title }} от {{ book.author.name }}. Жанр: {{ book.genre }}. Дата публикации: {{ book.publish_date }}</li>
+        {% endfor %}
+    </ul>
+
+    <h1>WebSocket чат с уведомлениями об изменениях в БД</h1>
+    <form action="" onsubmit="sendMessage(event)">
+        <input type="text" id="messageText" autocomplete="off"/>
+        <button>Send</button>
+    </form>
+    <ul id='messages'>
+    </ul>
+
+    <script>
+        var ws = new WebSocket("ws://localhost:8000/ws");
+           ws.onmessage = function(event) {
+               var messages = document.getElementById('messages')
+               var message = document.createElement('li')
+               var content = document.createTextNode(event.data)
+               message.appendChild(content)
+               messages.appendChild(message)
+           };
+           function sendMessage(event) {
+               var input = document.getElementById("messageText")
+               ws.send(input.value)
+               input.value = ''
+               event.preventDefault()
+           }
+    </script>
+</body>
+</html>
