@@ -162,3 +162,9 @@ async def delete_book_api(book_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail=f"Book with id {book_id} not found")
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+if __name__ == '__main__':
+    import uvicorn
+
+    uvicorn.run('main:app', host='0.0.0.0', port=8000, reload=True)
